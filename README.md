@@ -1,5 +1,7 @@
 # Unity Teleop (for ARM lab's "Victor" robot)
-This is the unity portion use for teleoperating a robot.
+This is the unity portion use for teleoperating a robot. 
+This is the HEADLESS version, that does not require wearing the VR visor. For the original unity package where you control the robot while wearing the visor, see: https://github.com/UM-ARM-Lab/unity_victor_teleop
+
 Want to learn how to use this package to teleop your robot? Check out the [tutorials!](https://github.com/UM-ARM-Lab/unity_victor_teleop/wiki/Tutorial-1:-Set-up-Unity-package)
 
 ## Brief description
