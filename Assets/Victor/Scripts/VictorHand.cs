@@ -74,10 +74,11 @@ namespace Valve.VR.InteractionSystem.Sample
                 }
                 
             }
-
+            
 
             if (interactable.attachedToHand)
             {
+                Debug.Log("Here..");
                 SteamVR_Input_Sources hand = interactable.attachedToHand.handType;
 
                 grip = a_grip.GetAxis(hand);
@@ -154,10 +155,10 @@ namespace Valve.VR.InteractionSystem.Sample
                 }
             }
             */
-            foreach (Renderer r in arm.GetComponentsInChildren<Renderer>())
+            /*foreach (Renderer r in arm.GetComponentsInChildren<Renderer>())
             {
                 r.enabled = vis;
-            }
+            }*/
         }
     }
 }
