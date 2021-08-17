@@ -24,6 +24,9 @@ namespace Valve.VR.InteractionSystem.Sample
         public Material invalidIkMaterial;
         public StringListener validIkListener;
         public WrenchStampedListener wrenchStampedListener;
+        public Hand controller;
+        private Vector3 real_hand_to_controller_grasp;
+        public Transform target_transform;
 
         public double forceThreshold = 0;
         public double forceMax = 0;
@@ -48,17 +51,12 @@ namespace Valve.VR.InteractionSystem.Sample
 
             interactable = GetComponent<Interactable>();
             interactable.activateActionSetOnAttach = actionSet;
+            //target_transform = new GameObject().transform;
 
         }
 
         private void Update()
         {
-            Vector2 steer = Vector2.zero;
-            //float throttle = 0;
-            //float brake = 0;
-
-            //bool b_brake = false;
-            //bool b_reset = false;
             float grip = 0;
 
             if (wrenchStampedListener != null)
@@ -82,10 +80,6 @@ namespace Valve.VR.InteractionSystem.Sample
             {
                 SteamVR_Input_Sources hand = interactable.attachedToHand.handType;
 
-                //steer = a_steering.GetAxis(hand);
-
-                //throttle = a_trigger.GetAxis(hand);
-                //gripped = a_grip.GetState(hand);
                 grip = a_grip.GetAxis(hand);
                 //Debug.Log("Gripped is " + gripped);
                 RosSharp.RosBridgeClient.GripperPublisher gripper_pub = 
@@ -93,7 +87,9 @@ namespace Valve.VR.InteractionSystem.Sample
                 RosSharp.RosBridgeClient.HandTargetPublisher hand_target_pub = 
                     GetComponent<RosSharp.RosBridgeClient.HandTargetPublisher>();
                 gripper_pub.Publish(grip);
-                hand_target_pub.PublishPose(this.transform);
+
+                target_transform.SetPositionAndRotation(this.transform.position - real_hand_to_controller_grasp, this.transform.rotation);
+                hand_target_pub.PublishPose(target_transform);
                 //b_brake = a_brake.GetState(hand);
                 //b_reset = a_reset.GetState(hand);
                 //brake = b_brake ? 1 : 0;
@@ -126,9 +122,11 @@ namespace Valve.VR.InteractionSystem.Sample
             else
             {
                 SetArmVisibility(false);
-                this.transform.position = hand_real.transform.position;
+                this.transform.position = controller.transform.position;
                 this.transform.rotation = hand_real.transform.rotation;
                 this.transform.localScale = hand_real.transform.localScale;
+
+                real_hand_to_controller_grasp = controller.transform.position - hand_real.transform.position;
                 SetHandColor(validIkMaterial);
             }
 
